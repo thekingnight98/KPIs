@@ -53,7 +53,7 @@
               >
                 account_box
               </v-icon>
-              <router-link :to="{ path: '/edit/' + item._id }">
+              <router-link :to="{ path: '/edit/' + item._id }" v-bind:tooltip="item._id" append>
                 <v-icon color="green lighten-2" class="mr-3">
                   edit
                 </v-icon>

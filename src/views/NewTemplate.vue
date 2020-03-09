@@ -650,13 +650,16 @@ export default {
       ],
       selectinsertTagetToChief: [
         {
-          text: "สอดคล้องกับทางผู้บริหาร"
+          text: "สอดคล้องกับทางผู้บริหาร",
+          value: 1
         },
         {
-          text: "สอดคล้องกับเป้าหมายบุคคล"
+          text: "สอดคล้องกับเป้าหมายบุคคล",
+          value: 2
         },
         {
-          text: "สอดคล้องเบื้องต้น"
+          text: "สอดคล้องเบื้องต้น",
+          value: 3
         }
       ],
       valid: false,
