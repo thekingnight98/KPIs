@@ -1,5 +1,6 @@
 <template>
   <div id="NewtemplateScreen">
+    <loading :active.sync="isLoading" :is-full-page="fullPage" color="blue"></loading>
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-container>
         <v-card
@@ -69,7 +70,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-menu
-                      v-model="menu2popup1"
+                      v-model="menupopup1"
                       :close-on-content-click="false"
                       :nudge-right="40"
                       transition="scale-transition"
@@ -87,13 +88,13 @@
                       </template>
                       <v-date-picker
                         v-model="StartDate"
-                        @input="menu2popup1 = false"
+                        @input="menupopup1 = false"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-menu
-                      v-model="menu2popup2"
+                      v-model="menupopup2"
                       :close-on-content-click="false"
                       :nudge-right="40"
                       transition="scale-transition"
@@ -111,7 +112,7 @@
                       </template>
                       <v-date-picker
                         v-model="EndDate"
-                        @input="menu2popup2 = false"
+                        @input="menupopup2 = false"
                         color="red lighten-1"
                       ></v-date-picker>
                     </v-menu>
@@ -520,6 +521,8 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   name: "templateScreen",
@@ -612,6 +615,9 @@ export default {
         this.$store.commit("updateTemplate", value);
       }
     }
+  },
+  components: {
+    Loading
   },
   data() {
     return {
@@ -730,7 +736,9 @@ export default {
       EmptyTemplate: {},
       //   date: new Date().toISOString().substr(0, 10),
       menupopup1: false,
-      menupopup2: false
+      menupopup2: false,
+      isLoading: false,
+      fullPage: true
     };
   },
   watch: {
@@ -848,6 +856,7 @@ export default {
 
       this.EmptyTemplate = Object.assign({}, source);
       // console.log(this.EmptyTemplate);
+      this.isLoading = true;
       this.$store.dispatch("resetTemplateName");
 
       axios
@@ -865,6 +874,7 @@ export default {
             });
             console.log(res.data);
             setTimeout(() => this.$refs.templateType.focus(), 1500);
+            this.isLoading = false
           } else {
             Swal.fire({
               icon: "error",

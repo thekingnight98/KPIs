@@ -108,9 +108,7 @@ import vMultiselectListbox from "vue-multiselect-listbox";
 import "vue-multiselect-listbox/dist/vue-multi-select-listbox.css";
 import axios from "axios";
 import Swal from "sweetalert2";
-// Import component
 import Loading from "vue-loading-overlay";
-// Import stylesheet
 import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
@@ -147,6 +145,7 @@ export default {
       console.log(this.UserSelected);
     },
     deleted(id) {
+      this.isLoading = true
       axios
         .delete("https://kpis-backend.herokuapp.com/QuestionAdd/delete/" + id)
         .then(res => {
@@ -164,6 +163,7 @@ export default {
               );
             }, 1500);
           }
+          this.isLoading = false
         })
         .catch(err => console.log(err));
     },
