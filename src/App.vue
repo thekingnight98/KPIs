@@ -85,9 +85,9 @@ export default {
   data() {
     return {
       items: [
-        { title: "สร้างเป้าหมาย", icon: "mdi-home", link: "/newTemplate" },
-        { title: "ASSIGN", icon: "add_circle", link: "/assign" },
-        { title: "ประเมิณผล", icon: "mdi-calculator", link: "/assessment" },
+        { title: "สร้างเป้าหมาย", icon: "home", link: "/newTemplate" },
+        { title: "ASSIGN", icon: "assignment_ind", link: "/assign" },
+        { title: "ประเมิณผล", icon: "assessment", link: "/assessment" },
       ],
       sidebar: false,
       drawer: false,

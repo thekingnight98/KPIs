@@ -217,7 +217,7 @@ export default {
         this.snackbar = true;
         this.questionList = Object.assign({}, this.ObjList);
         console.log(this.questionList);
-        // this.$refs.form.resetValidation();
+        
         this.$router.push({ path: "/assign" });
       }
     }
