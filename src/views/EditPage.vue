@@ -1,5 +1,10 @@
 <template>
   <div id="EditScreen">
+    <loading
+      :active.sync="isLoading"
+      :is-full-page="fullPage"
+      color="blue"
+    ></loading>
     <v-card>
       <v-toolbar flat color="cyan" dark>
         <v-toolbar-title>คำถาม ?</v-toolbar-title>
@@ -13,7 +18,7 @@
           <v-icon left>mdi-account</v-icon>
           {{ item.title }}
         </v-tab>
-        <v-tab-item v-for="(item, index) in this.data" :key="index">
+        <v-tab-item v-for="(item, index) in this.data.questions" :key="index">
           <v-card flat>
             <v-card-text>
               <!-- เริ่ม form -->
@@ -217,6 +222,10 @@
 
 <script>
 import axios from "axios";
+import Swal from "sweetalert2";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+
 export default {
   name: "templateScreen",
   mounted() {
@@ -226,9 +235,10 @@ export default {
           this.$route.params.id
       )
       .then(res => {
-        this.data = res.data.questions;
-        console.log(this.data);
-        this.assignTitle = this.data.map((item, i) => {
+        this.data = res.data;
+        // console.log(this.data);
+        this.isLoading = false;
+        this.assignTitle = this.data.questions.map((item, i) => {
           return {
             title: "คำถาม " + (i + 1),
             Template_id: item.Template_id,
@@ -246,15 +256,11 @@ export default {
       })
       .catch(err => console.log(err));
   },
-  created() {
-    const Temp = this.$store.state.questtionsMock;
-    // console.log(Temp);
-    this.ObjList = Temp;
+  components:{
+    Loading
   },
   data() {
     return {
-      questionList: [],
-      ObjList: null,
       valid: true,
       selectTamplate: [
         {
@@ -297,22 +303,40 @@ export default {
           value: 3
         }
       ],
-      data: null,
+      data: { questions: [] },
       assignTitle: null,
-      selectTab: 0
+      selectTab: 0,
+      isLoading: true,
+      fullPage: true
     };
   },
   methods: {
     submit() {
       // if (this.$refs.form.validate()) {
       //   this.snackbar = true;
-      //   this.questionList = Object.assign({}, this.ObjList);
-      //   console.log(this.questionList);
-
       // }
-      console.log(this.data);
-      this.$router.push({ path: "/assign" });
-    }
+      this.isLoading = true
+      const EditObject = this.data;
+      console.log(EditObject);
+      
+      axios.put(
+          "https://kpis-backend.herokuapp.com/QuestionAdd/" + this.$route.params.id, EditObject
+        )
+        .then(res => {
+          if (res.data) {
+            Swal.fire({
+              icon: "success",
+              title: "Update Success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.isLoading = false
+            setTimeout(()=> { location = 'http://localhost:8081/edit/' + this.$route.params.id} , 1500 )
+          }
+        })
+        .catch(err => console.log(err));
+      // this.$router.push({ path: "/assign" });
+    },
   }
 };
 </script>
