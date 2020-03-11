@@ -1,146 +1,217 @@
 <template>
   <div id="EditScreen">
-    <v-form ref="form" v-for="(item, index) in this.data" :key="index" v-model="valid" lazy-validation>
-      <v-container>
-        <v-card
-          class="mx-auto"
-          style="border-color:#9E9E9E;"
-          max-width="1000"
-          outlined
+    <v-card>
+      <v-toolbar flat color="cyan" dark>
+        <v-toolbar-title>คำถาม ?</v-toolbar-title>
+      </v-toolbar>
+      <v-tabs color="red" vertical>
+        <v-tab
+          v-for="(item, index) in this.assignTitle"
+          :key="index"
+          @click="selectTab = index"
         >
-          <v-container>
-            <v-row>
-              <v-col class="d-flex" cols="12" sm="6">
-                <v-select
-                  v-model="item.KPI_Type_id"
-                  :rules="[v => !!v || 'โปรดเลือกรูปแบบการประเมิณผล']"
-                  :items="selectTamplate"
-                  label="รูปแบบการประเมิณผล"
-                  outlined
-                ></v-select>
-              </v-col>
-              <v-col class="d-flex" cols="12" sm="6">
-                <v-select
-                  v-model="item.InsertTagetToChief"
-                  :rules="[v => !!v || 'โปรดเลือกเป้าหมายที่สอดคล้อง']"
-                  :items="selectinsertTagetToChief"
-                  label="เป้าหมายที่สอดคล้อง"
-                  outlined
-                ></v-select>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-        <v-card
-          class="mx-auto mt-4"
-          style="border-color:#9E9E9E;"
-          max-width="1000"
-          outlined
-        >
-          <v-container>
-            <v-row>
-              <v-container>
-                <v-col class="mx-auto pa-0" cols="12" sm="12">
-                  <v-text-field
-                    v-model="item.KPI_name"
-                    label="ผลสัมฤทธิ์ที่คาดหวัง"
-                    :rules="[v => !!v || 'โปรดกรอกผลสัมฤทธิ์ที่คาดหวัง']"
+          <v-icon left>mdi-account</v-icon>
+          {{ item.title }}
+        </v-tab>
+        <v-tab-item v-for="(item, index) in this.data" :key="index">
+          <v-card flat>
+            <v-card-text>
+              <!-- เริ่ม form -->
+              <v-form
+                v-if="index === selectTab"
+                ref="form"
+                v-model="valid"
+                lazy-validation
+              >
+                <v-container>
+                  <v-card
+                    class="mx-auto"
+                    style="border-color:#9E9E9E;"
+                    max-width="1000"
                     outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col class="mx-auto pa-0" cols="12" sm="12">
-                  <v-text-field
-                    v-model="item.KPI_detail"
-                    label="ตัวชี้วัดผลการปฏิบัติงาน"
-                    :rules="[v => !!v || 'โปรดกรอกตัวชี้วัดผลการปฏิบัติงาน']"
-                    outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col class="pa-0" cols="12" sm="4">
-                  <v-select
-                    v-model="item.KPI_weight"
-                    :rules="[v => !!v || 'โปรดเลือกความสำคัญ']"
-                    :items="selectPriority"
-                    label="ความสำคัญ"
-                    outlined
-                  ></v-select>
-                </v-col>
-                <v-col class="pa-0" cols="12" sm="4">ระดับการประเมิณ : </v-col>
-                <v-row>
-                  <v-col class="pa-0" cols="12" sm="12">
+                  >
                     <v-container>
                       <v-row>
-                        <v-col class="pa-0 pl-4 pt-2 body-2" cols="3" sm="2"
-                          >(5) ดีเด่น :
-                        </v-col>
-                        <v-col class="pa-0 pr-4" cols="9" sm="10">
-                          <v-text-field
-                            v-model="item.Indicators[0].indicator_detail"
-                            label="รายละเอียด"
-                            :rules="[v => !!v || 'โปรดกรอกรายละเอียด']"
+                        <v-col class="d-flex" cols="12" sm="6">
+                          <v-select
+                            v-model="item.KPI_Type_id"
+                            :rules="[v => !!v || 'โปรดเลือกรูปแบบการประเมิณผล']"
+                            :items="selectTamplate"
+                            label="รูปแบบการประเมิณผล"
                             outlined
-                          ></v-text-field>
+                          ></v-select>
                         </v-col>
-                        <v-col class="pa-0 pl-4 pt-2 body-2" cols="3" sm="2"
-                          >(4) เกินกว่าที่คาดหวัง :
-                        </v-col>
-                        <v-col class="pa-0 pr-4" cols="9" sm="10">
-                          <v-text-field
-                            v-model="item.Indicators[1].indicator_detail"
-                            label="รายละเอียด"
-                            :rules="[v => !!v || 'โปรดกรอกรายละเอียด']"
+                        <v-col class="d-flex" cols="12" sm="6">
+                          <v-select
+                            v-model="item.InsertTagetToChief"
+                            :rules="[
+                              v => !!v || 'โปรดเลือกเป้าหมายที่สอดคล้อง'
+                            ]"
+                            :items="selectinsertTagetToChief"
+                            label="เป้าหมายที่สอดคล้อง"
                             outlined
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col class="pa-0 pl-4 pt-2 body-2" cols="3" sm="2"
-                          >(3) บรรลุตามที่คาดหวัง :
-                        </v-col>
-                        <v-col class="pa-0 pr-4" cols="9" sm="10">
-                          <v-text-field
-                            v-model="item.Indicators[2].indicator_detail"
-                            label="รายละเอียด"
-                            :rules="[v => !!v || 'โปรดกรอกรายละเอียด']"
-                            outlined
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col class="pa-0 pl-4 pt-2 body-2" cols="3" sm="2"
-                          >(2) ต่ำกว่าที่คาดหวัง :
-                        </v-col>
-                        <v-col class="pa-0 pr-4" cols="9" sm="10">
-                          <v-text-field
-                            v-model="item.Indicators[3].indicator_detail"
-                            label="รายละเอียด"
-                            :rules="[v => !!v || 'โปรดกรอกรายละเอียด']"
-                            outlined
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col class="pa-0 pl-4 pt-2 body-2" cols="3" sm="2"
-                          >(1) ต้องปรับปรุง :
-                        </v-col>
-                        <v-col class="pa-0 pr-4" cols="9" sm="10">
-                          <v-text-field
-                            v-model="item.Indicators[4].indicator_detail"
-                            label="รายละเอียด"
-                            :rules="[v => !!v || 'โปรดกรอกรายละเอียด']"
-                            outlined
-                          ></v-text-field>
+                          ></v-select>
                         </v-col>
                       </v-row>
                     </v-container>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-row>
-            <v-btn color="success" class="mr-4 mt-2" @click="submit"
-              >อัปเดต</v-btn
-            >
-          </v-container>
-        </v-card>
-      </v-container>
-    </v-form>
+                  </v-card>
+                  <v-card
+                    class="mx-auto mt-4"
+                    style="border-color:#9E9E9E;"
+                    max-width="1000"
+                    outlined
+                  >
+                    <v-container>
+                      <v-row>
+                        <v-container>
+                          <v-col class="mx-auto pa-0" cols="12" sm="12">
+                            <v-text-field
+                              v-model="item.KPI_name"
+                              label="ผลสัมฤทธิ์ที่คาดหวัง"
+                              :rules="[
+                                v => !!v || 'โปรดกรอกผลสัมฤทธิ์ที่คาดหวัง'
+                              ]"
+                              outlined
+                            ></v-text-field>
+                          </v-col>
+                          <v-col class="mx-auto pa-0" cols="12" sm="12">
+                            <v-text-field
+                              v-model="item.KPI_detail"
+                              label="ตัวชี้วัดผลการปฏิบัติงาน"
+                              :rules="[
+                                v => !!v || 'โปรดกรอกตัวชี้วัดผลการปฏิบัติงาน'
+                              ]"
+                              outlined
+                            ></v-text-field>
+                          </v-col>
+                          <v-col class="pa-0" cols="12" sm="4">
+                            <v-select
+                              v-model="item.KPI_weight"
+                              :rules="[v => !!v || 'โปรดเลือกความสำคัญ']"
+                              :items="selectPriority"
+                              label="ความสำคัญ"
+                              outlined
+                            ></v-select>
+                          </v-col>
+                          <v-col class="pa-0" cols="12" sm="4"
+                            >ระดับการประเมิณ :
+                          </v-col>
+                          <v-row>
+                            <v-col class="pa-0" cols="12" sm="12">
+                              <v-container>
+                                <v-row>
+                                  <v-col
+                                    class="pa-0 pl-4 pt-2 body-2"
+                                    cols="3"
+                                    sm="2"
+                                    >(5) ดีเด่น :
+                                  </v-col>
+                                  <v-col class="pa-0 pr-4" cols="9" sm="10">
+                                    <v-text-field
+                                      v-model="
+                                        item.Indicators[0].indicator_detail
+                                      "
+                                      label="รายละเอียด"
+                                      :rules="[
+                                        v => !!v || 'โปรดกรอกรายละเอียด'
+                                      ]"
+                                      outlined
+                                    ></v-text-field>
+                                  </v-col>
+                                  <v-col
+                                    class="pa-0 pl-4 pt-2 body-2"
+                                    cols="3"
+                                    sm="2"
+                                    >(4) เกินกว่าที่คาดหวัง :
+                                  </v-col>
+                                  <v-col class="pa-0 pr-4" cols="9" sm="10">
+                                    <v-text-field
+                                      v-model="
+                                        item.Indicators[1].indicator_detail
+                                      "
+                                      label="รายละเอียด"
+                                      :rules="[
+                                        v => !!v || 'โปรดกรอกรายละเอียด'
+                                      ]"
+                                      outlined
+                                    ></v-text-field>
+                                  </v-col>
+
+                                  <v-col
+                                    class="pa-0 pl-4 pt-2 body-2"
+                                    cols="3"
+                                    sm="2"
+                                    >(3) บรรลุตามที่คาดหวัง :
+                                  </v-col>
+                                  <v-col class="pa-0 pr-4" cols="9" sm="10">
+                                    <v-text-field
+                                      v-model="
+                                        item.Indicators[2].indicator_detail
+                                      "
+                                      label="รายละเอียด"
+                                      :rules="[
+                                        v => !!v || 'โปรดกรอกรายละเอียด'
+                                      ]"
+                                      outlined
+                                    ></v-text-field>
+                                  </v-col>
+
+                                  <v-col
+                                    class="pa-0 pl-4 pt-2 body-2"
+                                    cols="3"
+                                    sm="2"
+                                    >(2) ต่ำกว่าที่คาดหวัง :
+                                  </v-col>
+                                  <v-col class="pa-0 pr-4" cols="9" sm="10">
+                                    <v-text-field
+                                      v-model="
+                                        item.Indicators[3].indicator_detail
+                                      "
+                                      label="รายละเอียด"
+                                      :rules="[
+                                        v => !!v || 'โปรดกรอกรายละเอียด'
+                                      ]"
+                                      outlined
+                                    ></v-text-field>
+                                  </v-col>
+
+                                  <v-col
+                                    class="pa-0 pl-4 pt-2 body-2"
+                                    cols="3"
+                                    sm="2"
+                                    >(1) ต้องปรับปรุง :
+                                  </v-col>
+                                  <v-col class="pa-0 pr-4" cols="9" sm="10">
+                                    <v-text-field
+                                      v-model="
+                                        item.Indicators[4].indicator_detail
+                                      "
+                                      label="รายละเอียด"
+                                      :rules="[
+                                        v => !!v || 'โปรดกรอกรายละเอียด'
+                                      ]"
+                                      outlined
+                                    ></v-text-field>
+                                  </v-col>
+                                </v-row>
+                              </v-container>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-row>
+                      <v-btn color="success" class="mr-4 mt-2" @click="submit"
+                        >อัปเดต</v-btn
+                      >
+                    </v-container>
+                  </v-card>
+                </v-container>
+              </v-form>
+              <!-- end form -->
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
   </div>
 </template>
 
@@ -150,10 +221,28 @@ export default {
   name: "templateScreen",
   mounted() {
     axios
-      .get("https://kpis-backend.herokuapp.com/QuestionAdd/" + this.$route.params.id)
+      .get(
+        "https://kpis-backend.herokuapp.com/QuestionAdd/" +
+          this.$route.params.id
+      )
       .then(res => {
         this.data = res.data.questions;
         console.log(this.data);
+        this.assignTitle = this.data.map((item, i) => {
+          return {
+            title: "คำถาม " + (i + 1),
+            Template_id: item.Template_id,
+            KPI_Type_id: item.KPI_Type_id,
+            KPI_name: item.KPI_name,
+            KPI_detail: item.KPI_detail,
+            KPI_weight: item.KPI_weight,
+            InsertTagetToChief: item.InsertTagetToChief,
+            start_date: item.start_date,
+            end_date: item.end_date,
+            Indicators: item.Indicators
+          };
+        });
+        // console.log(this.assignTitle);
       })
       .catch(err => console.log(err));
   },
@@ -166,7 +255,7 @@ export default {
     return {
       questionList: [],
       ObjList: null,
-      valid: false,
+      valid: true,
       selectTamplate: [
         {
           text: "เป้าหมายเชิงยุทศาสตร์",
@@ -208,18 +297,21 @@ export default {
           value: 3
         }
       ],
-      data : null,
+      data: null,
+      assignTitle: null,
+      selectTab: 0
     };
   },
   methods: {
     submit() {
-      if (this.$refs.form.validate()) {
-        this.snackbar = true;
-        this.questionList = Object.assign({}, this.ObjList);
-        console.log(this.questionList);
-        
-        this.$router.push({ path: "/assign" });
-      }
+      // if (this.$refs.form.validate()) {
+      //   this.snackbar = true;
+      //   this.questionList = Object.assign({}, this.ObjList);
+      //   console.log(this.questionList);
+
+      // }
+      console.log(this.data);
+      this.$router.push({ path: "/assign" });
     }
   }
 };
