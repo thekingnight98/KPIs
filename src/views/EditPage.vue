@@ -204,9 +204,12 @@
                           </v-row>
                         </v-container>
                       </v-row>
-                      <v-btn color="success" class="mr-4 mt-2" @click="submit"
-                        >อัปเดต</v-btn
-                      >
+                      <v-row>
+                        <v-spacer/>
+                        <v-btn color="success" class="mr-4 mt-2" @click="submit"
+                          >อัปเดต</v-btn
+                        >
+                      </v-row>
                     </v-container>
                   </v-card>
                 </v-container>
@@ -256,7 +259,7 @@ export default {
       })
       .catch(err => console.log(err));
   },
-  components:{
+  components: {
     Loading
   },
   data() {
@@ -315,12 +318,15 @@ export default {
       // if (this.$refs.form.validate()) {
       //   this.snackbar = true;
       // }
-      this.isLoading = true
+      this.isLoading = true;
       const EditObject = this.data;
       console.log(EditObject);
-      
-      axios.put(
-          "https://kpis-backend.herokuapp.com/QuestionAdd/" + this.$route.params.id, EditObject
+
+      axios
+        .put(
+          "https://kpis-backend.herokuapp.com/QuestionAdd/" +
+            this.$route.params.id,
+          EditObject
         )
         .then(res => {
           if (res.data) {
@@ -330,13 +336,15 @@ export default {
               showConfirmButton: false,
               timer: 1500
             });
-            this.isLoading = false
-            setTimeout(()=> { location = 'http://localhost:8081/edit/' + this.$route.params.id} , 1500 )
+            this.isLoading = false;
+            setTimeout(() => {
+              location = "http://localhost:8081/edit/" + this.$route.params.id;
+            }, 1500);
           }
         })
         .catch(err => console.log(err));
       // this.$router.push({ path: "/assign" });
-    },
+    }
   }
 };
 </script>

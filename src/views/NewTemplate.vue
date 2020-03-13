@@ -1,6 +1,10 @@
 <template>
   <div id="NewtemplateScreen">
-    <loading :active.sync="isLoading" :is-full-page="fullPage" color="blue"></loading>
+    <loading
+      :active.sync="isLoading"
+      :is-full-page="fullPage"
+      color="blue"
+    ></loading>
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-container>
         <v-card
@@ -188,11 +192,20 @@
                 </v-row>
               </v-container>
             </v-row>
-            <v-btn color="success" class="mr-4 mt-2" @click="submitQuestion"
-              >สร้างคำถาม</v-btn
-            >
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-btn color="success" class="mr-4 mt-2" @click="submitQuestion"
+                >สร้างคำถาม</v-btn
+              >
+            </v-row>
           </v-container>
         </v-card>
+        <v-row>
+          <v-spacer></v-spacer>
+          <v-btn @click="createTemplate" color="primary" class="mr-4 mt-4"
+            >สร้าง template</v-btn
+          >
+        </v-row>
       </v-container>
     </v-form>
 
@@ -388,7 +401,7 @@
     </template>
     <!-- close table result -->
 
-    <!-- open Modal -->
+    <!-- open Modal Edit question -->
     <v-dialog v-model="dialog" max-width="700px">
       <v-card>
         <v-card-text>
@@ -399,7 +412,7 @@
                   filled
                   auto-grow
                   rows="2"
-                  v-model="editedItem.kpi_name"
+                  v-model="editedItem.KPI_name"
                   label="ผลสัมฤทธิ์ที่คาดหวัง :"
                   row-height="20"
                 ></v-textarea>
@@ -408,7 +421,7 @@
                 <v-textarea
                   filled
                   auto-grow
-                  v-model="editedItem.kpi_detail"
+                  v-model="editedItem.KPI_detail"
                   label="ตัวชี้วัดผลการปฏิบัติงาน :"
                   rows="2"
                   row-height="20"
@@ -418,7 +431,7 @@
                 <v-select
                   :items="selectPriority"
                   label="ความสำคัญ :"
-                  v-model="editedItem.kpi_weight"
+                  v-model="editedItem.KPI_weight"
                 ></v-select>
               </v-col>
 
@@ -483,7 +496,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <!-- close Modal -->
+    <!-- close Modal Edit question -->
 
     <!-- open Template create-->
     <v-dialog v-model="dialogTemplate" persistent max-width="290">
@@ -506,15 +519,7 @@
       </v-card>
     </v-dialog>
     <!-- close close Template create -->
-
-    <v-row>
-      <v-col cols="10"></v-col>
-      <v-col cols="2">
-        <v-btn @click="createTemplate" color="primary" class="mr-4 mt-4"
-          >สร้าง template</v-btn
-        >
-      </v-col>
-    </v-row>
+    
   </div>
 </template>
 
@@ -667,9 +672,9 @@ export default {
       dialogTemplate: false,
       editedIndex: -1,
       editedItem: {
-        kpi_name: null,
-        kpi_detail: null,
-        kpi_weight: null,
+        KPI_name: null,
+        KPI_detail: null,
+        KPI_weight: null,
         Indicators: [
           {
             kpi_id: null,
@@ -702,9 +707,9 @@ export default {
         end_date: null
       },
       defaultItem: {
-        kpi_name: null,
-        kpi_detail: null,
-        kpi_weight: null,
+        KPI_name: null,
+        KPI_detail: null,
+        KPI_weight: null,
         Indicators: [
           {
             kpi_id: null,
@@ -792,7 +797,7 @@ export default {
           start_date: this.StartDate,
           end_date: this.EndDate
         });
-        console.log(this.$store.state.questionList);
+        // console.log(this.$store.state.questionList);
         // RESET VALAE IN STORE
         this.$store.dispatch("resetTamplateType");
         this.$store.dispatch("resetKPIPerformance");
@@ -808,7 +813,7 @@ export default {
       }
     },
     editItem(item) {
-      console.log(item);
+      // console.log(item);
       this.editedIndex = this.questionList.indexOf(item);
       // console.log(this.editedIndex);
       this.editedItem = Object.assign({}, item);
@@ -818,8 +823,6 @@ export default {
     },
     deleteItem(item) {
       const index = this.questionList.indexOf(item);
-      console.log(index);
-      console.log(item);
       confirm("คุณแน่ใจนะว่าจะลบ คำถามนี้ ?") &&
         this.questionList.splice(index, 1);
     },
@@ -877,7 +880,7 @@ export default {
             });
             console.log(res.data);
             setTimeout(() => this.$refs.templateType.focus(), 1500);
-            this.isLoading = false
+            this.isLoading = false;
           } else {
             Swal.fire({
               icon: "error",
