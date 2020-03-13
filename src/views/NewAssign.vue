@@ -73,10 +73,14 @@
       </v-card>
       <v-row class="mt-5">
         <v-col>
-          <div>รายชื่อพนักงานที่ได้รับมอบหมาย</div>
+          <v-row justify="center">
+            <p class="font-weight-black">รายชื่อพนักงานที่ได้รับมอบหมาย</p>
+          </v-row>
         </v-col>
         <v-col>
-          <div>รายชื่อพนักงานที่ยังไม่ได้ได้รับมอบหมาย</div>
+          <v-row justify="center">
+            <p class="font-weight-black">รายชื่อพนักงานที่ยังไม่ได้ได้รับมอบหมาย</p>
+          </v-row>
         </v-col>
       </v-row>
       <v-multiselect-listbox
@@ -134,11 +138,11 @@ export default {
 
       searchnameString.trim().toLowerCase();
 
-      template = template.filter((item)=>{
+      template = template.filter(item => {
         if (item.Template_name.toLowerCase().indexOf(searchnameString) !== -1) {
           return item;
         }
-      })
+      });
 
       return template;
     }
