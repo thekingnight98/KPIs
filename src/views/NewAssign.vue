@@ -8,12 +8,14 @@
       color="blue"
     ></loading>
     <v-container>
+      <!-- append icon ด้านหลัง prepend icon ด้านหน้า -->
       <v-text-field
         v-model="search"
-        append-icon="search"
-        label="Search"
+        prepend-icon="search"
+        placeholder="Search..."
         single-line
         hide-details
+        clearable
       ></v-text-field>
       <v-card class="mx-auto mt-10" style="border-color:#9E9E9E;" outlined>
         <v-container>
@@ -31,7 +33,7 @@
           />
           <v-row
             class="ml-2 mr-2"
-            v-for="(item, index) in this.TempTempate"
+            v-for="(item, index) in this.filterTemlateFeed"
             :key="index"
           >
             <v-col cols="4" sm="3">
@@ -53,7 +55,11 @@
               >
                 account_box
               </v-icon>
-              <router-link :to="{ path: '/edit/' + item._id }" v-bind:tooltip="item._id" append>
+              <router-link
+                :to="{ path: '/edit/' + item._id }"
+                v-bind:tooltip="item._id"
+                append
+              >
                 <v-icon color="green lighten-2" class="mr-3">
                   edit
                 </v-icon>
@@ -117,6 +123,26 @@ export default {
     vMultiselectListbox,
     Loading
   },
+  computed: {
+    filterTemlateFeed() {
+      var template = this.TempTempate;
+      var searchnameString = this.search;
+
+      if (!searchnameString) {
+        return template;
+      }
+
+      searchnameString.trim().toLowerCase();
+
+      template = template.filter((item)=>{
+        if (item.Template_name.toLowerCase().indexOf(searchnameString) !== -1) {
+          return item;
+        }
+      })
+
+      return template;
+    }
+  },
   mounted() {
     axios
       .get("https://kpis-backend.herokuapp.com/QuestionAdd")
@@ -145,7 +171,7 @@ export default {
       console.log(this.UserSelected);
     },
     deleted(id) {
-      this.isLoading = true
+      this.isLoading = true;
       axios
         .delete("https://kpis-backend.herokuapp.com/QuestionAdd/delete/" + id)
         .then(res => {
@@ -163,7 +189,7 @@ export default {
               );
             }, 1500);
           }
-          this.isLoading = false
+          this.isLoading = false;
         })
         .catch(err => console.log(err));
     },

@@ -478,13 +478,18 @@
                 </v-container>
               </v-col>
               <v-col cols="12" sm="6" md="12">
-                <v-textarea
+                <!-- <v-textarea
                   filled
                   auto-grow
                   rows="2"
                   v-model="editedItem.InsertTagetToChief"
                   label="สอดกล้องกับเป้าหมายผู้บังคับบัญชา :"
-                ></v-textarea>
+                ></v-textarea> -->
+                <v-select
+                  :items="selectinsertTagetToChief"
+                  label="ความสำคัญ :"
+                  v-model="editedItem.InsertTagetToChief"
+                ></v-select>
               </v-col>
             </v-row>
           </v-container>
